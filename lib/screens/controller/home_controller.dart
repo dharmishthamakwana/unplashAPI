@@ -1,20 +1,17 @@
-
+import 'package:extra2/screens/model/image_model.dart';
 import 'package:extra2/utiles/api_helper.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  Apihelper apiHelper =Apihelper();
+  static HomeController controller = HomeController._();
 
-  List<dynamic> apilist=[];
+  HomeController._();
 
+  RxInt index = 0.obs;
+  RxList<ImageModel> data = <ImageModel>[].obs;
+  RxList date = [].obs;
 
-  Future<List> Getdata() async {
-    apilist = await apiHelper.apihelper();
-    return apilist;
+  Future<void> callApi() async {
+    data.value = await Apihelper.apiHelper.apihelper();
   }
 }
-
-
-
-
-

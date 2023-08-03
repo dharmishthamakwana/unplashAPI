@@ -1,49 +1,43 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extra2/screens/controller/home_controller.dart';
-import 'package:extra2/utiles/api_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text("Images")),
-        body: FutureBuilder(
-          future: homeController.Getdata(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            } else if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: homeController.apilist.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 200,
-                      width: 200,
-                      child: Image(image:
-                          NetworkImage("${homeController.apilist[index].links.photos}"
-                        ),
-                      ),
+        appBar: AppBar(
+          title: Text("Home Screen", style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.blueGrey,
+        ),
+        body: Obx(
+          () => ListView.builder(
+            itemCount: HomeController.controller.data.length,
+            itemBuilder: (context, index) {
+              return Container(
+                color: Colors.blueGrey.shade200,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 200,
+                    width: 200,
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          "${HomeController.controller.data[index].coverPhoto!.urls!.small}",
+                      fit: BoxFit.fill,
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          Center(child: CircularProgressIndicator()),
                     ),
-                  );
-                },
+                  ),
+                ),
               );
-            }
-            return Center(child: CircularProgressIndicator());
-          },
+            },
+          ),
         ),
       ),
     );
